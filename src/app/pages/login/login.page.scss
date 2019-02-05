@@ -1,0 +1,56 @@
+ion-content{
+    --background: url('src/assets/imgs/manos.jpg') no-repeat center center / cover;
+}
+
+
+.contenedor{
+
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .caja-logo{
+    margin: 150px 0 0;
+  }
+
+  .item-ios{
+    background-color: transparent;
+    margin: 0 0 30px 0;
+    font-size: 1em;
+  }
+
+  .text-input-ios{
+    color:white;
+    font-size: 1.2em;
+  }
+
+  .pie{
+    position: fixed;
+    bottom: 0px;
+    text-align: right;
+    color:white;
+    width: 90%;
+  }
+
+  .derecha{
+    text-align: right;
+  }
+
+  button, .esconder{
+    position: relative;
+    left:0;
+    opacity: 1;
+    transition: 0.8s linear !important;
+  }
+
+
+  .datos{
+      position: relative;
+      left:1500px;
+      transition: 0.8s linear !important;
+
+  }
+
+.cajaLogin{
+  width: 200px;
+}

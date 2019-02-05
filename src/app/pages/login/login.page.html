@@ -1,0 +1,69 @@
+<!--
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Login
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+-->
+
+
+<ion-content padding>
+
+  <ion-grid class="contenedor">
+    <ion-row class="caja-logo">
+        <ion-col size="12" size-md="4" offset-md="4">
+          <img src="../../assets/imgs/logo2.svg">
+        </ion-col>
+      </ion-row>
+
+
+      <ion-row #cajaRut  class="esconder">
+          <ion-col size="12" size-md="4" offset-md="4">
+            <div>
+            <ion-item >
+              <ion-input type="text" [(ngModel)]="rut" placeholder="Rut Empresa"></ion-input>
+            </ion-item>
+              <ion-button color="light" expand="block" fill="outline" (click)="validarRut(rut)">Validar </ion-button>
+
+            </div>
+        </ion-col>
+
+      </ion-row>
+
+
+
+      <ion-row #datosUsuario class="datos">
+          <ion-col size="12" size-md="4" offset-md="4" >
+              <ion-item>
+                <ion-input type="password" [(ngModel)]="token" placeholder="Password. Si no lo tienes solicitado en Gour-net" ></ion-input>
+              </ion-item>
+          </ion-col>
+
+          <ion-col size="6" size-md="2" offset-md="4" >
+              <ion-button color="light" expand="block" fill="outline" (click)="refrescar()">Volver</ion-button>
+          </ion-col>
+          <ion-col size="6" size-md="2">
+            <ion-button color="light" expand="block" fill="outline" (click)="validarToken(token)">Entrar</ion-button>
+          </ion-col>
+
+
+          <ion-col size="12" size-md="2" offset-md="4">
+            <a href="http://www.gour-net.cl">Olvidé mi contraseña</a>
+          </ion-col>
+      </ion-row>
+
+
+  <ion-row class="pie">
+          <ion-col size="12">
+            <p>Versión 0.0.2</p>
+        </ion-col>
+      </ion-row>
+
+
+  </ion-grid>
+</ion-content>

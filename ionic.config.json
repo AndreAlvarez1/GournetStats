@@ -1,5 +1,7 @@
 {
   "name": "gournetStats",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
