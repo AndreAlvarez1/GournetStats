@@ -26,7 +26,7 @@
           <ion-col size="12" size-md="4" offset-md="4">
             <div>
             <ion-item >
-              <ion-input type="text" [(ngModel)]="rut" placeholder="Rut Empresa"></ion-input>
+              <ion-input type="text" [(ngModel)]="rut" placeholder="Rut Empresa" ></ion-input>
             </ion-item>
               <ion-button color="light" expand="block" fill="outline" (click)="validarRut(rut)">Validar </ion-button>
 
@@ -40,7 +40,7 @@
       <ion-row #datosUsuario class="datos">
           <ion-col size="12" size-md="4" offset-md="4" >
               <ion-item>
-                <ion-input type="password" [(ngModel)]="token" placeholder="Password. Si no lo tienes solicitado en Gour-net" ></ion-input>
+                <ion-input type="password" [(ngModel)]="token" placeholder="Password. Si no lo tienes solicitado en Gour-net" value="4648A" ></ion-input>
               </ion-item>
           </ion-col>
 
@@ -66,4 +66,6 @@
 
 
   </ion-grid>
+
+
 </ion-content>

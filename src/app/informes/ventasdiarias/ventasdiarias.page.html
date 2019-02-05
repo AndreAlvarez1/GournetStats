@@ -1,0 +1,90 @@
+<ion-header>
+  <ion-toolbar class="naranjo">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Ventas Diarias
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="encabezado">
+    <h1>Informe</h1><br>
+    <h2>Ventas del día</h2>
+    <p>Razón Social: {{this.memoria.empresa.Razon}}</p>
+
+    <ion-item>
+       <ion-label>Locales</ion-label>
+       <ion-select [(ngModel)]="local" interface="localAlertOpts">
+         <ion-select-option *ngFor="let local of memoria.locales" [value]="local.Id" multiple="false">{{local.Descripcion}}</ion-select-option>
+       </ion-select>
+    </ion-item>
+
+
+
+
+     <ion-button color="light" expand="block" fill="outline" (click)="recargarDatos(local)">Cargar Datos</ion-button>
+
+  </div>
+
+
+  <div class="graficos">
+    <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <h2>Ventas</h2>
+              <h5>Total ventas del día hasta el momento</h5>
+              <h1 id="ventas" class="ventas">0</h1>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col col-12>
+              <h2>Ventas Diarias</h2>
+              <h5>Ventas actuales vs ventas mismo dia semana anterior</h5>
+              <canvas #barCanvas ></canvas>
+            </ion-col>
+          </ion-row>
+
+          <ion-row>
+            <ion-col col-12>
+              <h2>Ventas por Hora</h2>
+              <h5>Ventas actuales vs promedio de ventas del dia durante el año</h5>
+              <canvas #lineCanvas></canvas>
+            </ion-col>
+          </ion-row>
+    </ion-grid>
+    <ion-grid style="padding:0">
+      <ion-row>
+        <ion-col col-12 style="padding:0">
+          <iframe width="100%" height="400px" src="http://www.gour-net.cl/carrusel/"></iframe>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="club naranjo">
+        <ion-col col-12 >
+
+          <h1><ion-icon name="cloud"></ion-icon> Club Gour-net</h1>
+          <p>Puedes tener muchos informes más contratando Club Gour-net. </p>
+          <p>En esta plataforma no solo tendrás acceso a interesantes informes si no también tendrás respaldada tu base de datos completa en nuetro Data Center.</p>
+          <a href="http://gour-net.cl/#club">Saber más</a>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="footer">
+        <ion-col col-12 >
+          <img src="../../assets/imgs/logo2.svg" width="50%">
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+</div>
+
+
+
+
+
+</ion-content>

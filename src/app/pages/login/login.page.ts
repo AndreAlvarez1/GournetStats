@@ -32,6 +32,8 @@ export class LoginPage implements OnInit {
               public memoria: MemoriaService,
               private router: Router
               ) {
+              this.rut = "76.022.389-1",
+              this.token= "4648A"
   }
 
   ngOnInit() {
@@ -77,7 +79,7 @@ export class LoginPage implements OnInit {
         console.log("match!");
         this.memoria.guardarDato("miRut",rut);
         this.memoria.guardarDato("miToken",token);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/ventasdiarias']);
       }else{
         this.errorToken();
       }

@@ -16,6 +16,11 @@ export class AppComponent {
       icon: 'home'
     },
     {
+      title: 'Ventas Diarias',
+      url: '/ventasdiarias',
+      icon: 'stats'
+    },
+    {
       title: 'List',
       url: '/list',
       icon: 'list'
