@@ -25,6 +25,7 @@ export class LoginPage implements OnInit {
   public password :string;
   public empresas: any;
   public empresa: any;
+  public datoEmpresa: any;
 
   constructor(private conector: ConectorService,
               public alertController: AlertController,
@@ -59,12 +60,13 @@ export class LoginPage implements OnInit {
    validarRut(rut){
     console.log(rut);
     this.conector.traedatosGet(`ventasdiarias/empresa/${rut}`)
-    .subscribe(datoEmpresa => {
-                                console.log(datoEmpresa.Data);
-                                this.memoria.empresa = datoEmpresa.Data;
-                                this.traerLocales(this.memoria.empresa.Tabla)
+    .subscribe(datos => {       this.datoEmpresa = datos['Data']
+                                console.log(this.datoEmpresa);
+                                this.memoria.empresa = this.datoEmpresa;
+                                this.traerLocales(this.memoria.empresa['Tabla'])
                                 this.izquierda();
-                                setTimeout(this.esconderBoton(), 10000);
+                                this.esconderBoton();
+
                               },
                               error => {
                                           this.errorRut()
@@ -88,8 +90,8 @@ export class LoginPage implements OnInit {
 
 traerLocales(tabla){
       this.conector.traedatosGet(`ventasdiarias/empresa/tabla/${tabla}/locales`)
-      .subscribe(locales => {console.log(locales.Data);
-                           this.memoria.locales = locales.Data;
+      .subscribe(locales => {console.log(locales['Data']);
+                           this.memoria.locales = locales['Data'];
                          });
 }
 

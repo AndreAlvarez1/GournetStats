@@ -10,7 +10,14 @@
 </ion-header>
 
 <ion-content>
-
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content
+      pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Actualizando...">
+      </ion-refresher-content>
+  </ion-refresher>
   <div class="encabezado">
     <h1>Informe</h1><br>
     <h2>Ventas del día</h2>
@@ -33,16 +40,20 @@
 
   <div class="graficos">
     <ion-grid>
-          <ion-row>
-            <ion-col size="12">
-              <h2>Ventas</h2>
-              <h5>Total ventas del día hasta el momento</h5>
-              <h1 id="ventas" class="ventas">0</h1>
-            </ion-col>
-          </ion-row>
+
+                <ion-row>
+                  <ion-col size="12">
+                    <h2>Ventas</h2>
+                    <h5>Total ventas del día hasta el momento</h5>
+                    <h1 id="ventas" class="ventas">0</h1>
+                  </ion-col>
+                </ion-row>
+
+
+
 
           <ion-row>
-            <ion-col col-12>
+            <ion-col size="12">
               <h2>Ventas Diarias</h2>
               <h5>Ventas actuales vs ventas mismo dia semana anterior</h5>
               <canvas #barCanvas ></canvas>
@@ -50,7 +61,7 @@
           </ion-row>
 
           <ion-row>
-            <ion-col col-12>
+            <ion-col size="12">
               <h2>Ventas por Hora</h2>
               <h5>Ventas actuales vs promedio de ventas del dia durante el año</h5>
               <canvas #lineCanvas></canvas>
@@ -65,7 +76,7 @@
       </ion-row>
 
       <ion-row class="club naranjo">
-        <ion-col col-12 >
+        <ion-col size="12" >
 
           <h1><ion-icon name="cloud"></ion-icon> Club Gour-net</h1>
           <p>Puedes tener muchos informes más contratando Club Gour-net. </p>
@@ -75,7 +86,7 @@
       </ion-row>
 
       <ion-row class="footer">
-        <ion-col col-12 >
+        <ion-col size="12" >
           <img src="../../assets/imgs/logo2.svg" width="50%">
         </ion-col>
       </ion-row>

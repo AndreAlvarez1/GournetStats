@@ -9,6 +9,8 @@ export class MemoriaService {
 
 empresa: any;
 locales: any;
+Tabla: any;
+
 
   constructor(public http: HttpClientModule,
               private storage: Storage) { }

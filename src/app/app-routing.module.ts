@@ -14,7 +14,12 @@ const routes: Routes = [
   {
     path: 'login', loadChildren: './pages/login/login.module#LoginPageModule'
   },
-  { path: 'ventasdiarias', loadChildren: './informes/ventasdiarias/ventasdiarias.module#VentasdiariasPageModule' }
+  {
+    path: 'ventasdiarias', loadChildren: './informes/ventasdiarias/ventasdiarias.module#VentasdiariasPageModule'
+  },
+  {
+    path: 'soporte', loadChildren: './pages/soporte/soporte.module#SoportePageModule'
+  }
 ];
 
 @NgModule({

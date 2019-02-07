@@ -7,7 +7,6 @@ import { MemoriaService} from 'src/app/services/memoria.service';
 
 
 
-
 @Component({
   selector: 'app-ventasdiarias',
   templateUrl: './ventasdiarias.page.html',
@@ -24,26 +23,22 @@ barChart: any;
 lineChart: any;
 local: any;
 tabla: any;
-
+ventaEmpresa: any;
 
 
   constructor(private conector: ConectorService,
               public alertController: AlertController,
               public memoria: MemoriaService) {
-              this.tabla = this.memoria.empresa.Tabla;
+              this.tabla = this.memoria.empresa['Tabla'];
               this.local = this.memoria.locales[0].Id
   }
 
 
 
   ngOnInit() {
-    this.formatoFecha(this.fechaChile);
-    console.log("La Fecha de Chile es: ", this.fechaChile);
-    this.cargaDatos();
-    console.log()
-
-
-
+        console.log("La Fecha de Chile es: ", this.fechaChile);
+        this.formatoFecha(this.fechaChile)
+        this.cargaDatos();
   }
 
 
@@ -112,10 +107,10 @@ recargarDatos(local){
 }
 
 cargaDatos(){
-      console.log("Traigo las ventas de", `ventasdiarias/empresa/tabla/${this.tabla}/local/${this.local}/fecha/${this.fechaSelect}` )
       this.conector.traedatosGet(`ventasdiarias/empresa/tabla/${this.tabla}/local/${this.local}/fecha/${this.fechaSelect}`)
-          .subscribe(ventaEmpresa => {    if (ventaEmpresa.Data.length > 0){
-                                          const ventas = ventaEmpresa.Data[0]
+          .subscribe(datos => {          this.ventaEmpresa = datos['Data'];
+                                          if (this.ventaEmpresa.length > 0){
+                                          const ventas = this.ventaEmpresa[0]
                                           this.dibujarVentas(ventas.Vtadiaact);
                                           this.dibujarBarras(ventas.Vtadiaant,ventas.Vtadiaact);
                                           this.dibujarLineas([
@@ -229,9 +224,15 @@ async alertaDatos() {
    await alert.present();
  }
 
-
-
-
-
-
+ doRefresh(event) {
+     this.cargaDatos();
+     setTimeout(() => {
+       event.target.complete();
+     }, 500);
 }
+
+
+
+
+
+ }
