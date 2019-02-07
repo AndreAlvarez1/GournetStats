@@ -26,7 +26,7 @@
           <ion-col size="12" size-md="4" offset-md="4">
             <div>
             <ion-item >
-              <ion-input type="text" [(ngModel)]="rut" placeholder="Rut de la empresa sin puntos ni guiones" ></ion-input>
+              <ion-input type="text" [(ngModel)]="rut" placeholder="Rut empresa sin puntos ni guiones" ></ion-input>
             </ion-item>
               <ion-button color="light" expand="block" fill="outline" (click)="validarRut(rut)">Validar </ion-button>
 
@@ -53,8 +53,10 @@
 
 
           <ion-col size="12" size-md="2" offset-md="4">
-            <a href="http://www.gour-net.cl">Olvidé mi contraseña</a>
+            <ion-button fill="clear" (click)="sinToken()" >Olvidé o no tengo mi contraseña</ion-button>
           </ion-col>
+
+
       </ion-row>
 
 

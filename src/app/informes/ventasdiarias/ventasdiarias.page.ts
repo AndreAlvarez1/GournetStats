@@ -29,14 +29,15 @@ ventaEmpresa: any;
   constructor(private conector: ConectorService,
               public alertController: AlertController,
               public memoria: MemoriaService) {
-              this.tabla = this.memoria.empresa['Tabla'];
-              this.local = this.memoria.locales[0].Id
+
   }
 
 
 
   ngOnInit() {
         console.log("La Fecha de Chile es: ", this.fechaChile);
+        this.tabla = this.memoria.empresa.Tabla;
+        this.local = this.memoria.locales[0].Id;
         this.formatoFecha(this.fechaChile)
         this.cargaDatos();
   }
@@ -156,7 +157,7 @@ dibujarBarras(ayer,hoy){
 
           type: 'bar',
           data: {
-              labels: ["Promedio", "Hoy"],
+              labels: ["Día semana pasada", "Hoy"],
               datasets: [{
                   label: 'Ventas',
                   data: [ayer,hoy],

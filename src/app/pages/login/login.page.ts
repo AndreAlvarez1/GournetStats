@@ -3,6 +3,8 @@ import { ConectorService} from 'src/app/services/conector.service';
 import { AlertController } from '@ionic/angular';
 import { MemoriaService} from 'src/app/services/memoria.service';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+
 
 
 @Component({
@@ -20,7 +22,7 @@ export class LoginPage implements OnInit {
 
   public rut: any;
   public token: any;
-  public rutOk: boolean;
+  public rutOk: any;
   public mail: string;
   public password :string;
   public empresas: any;
@@ -31,10 +33,10 @@ export class LoginPage implements OnInit {
               public alertController: AlertController,
               public renderer: Renderer,
               public memoria: MemoriaService,
-              private router: Router
+              private router: Router,
+              public toastController: ToastController
               ) {
-              this.rut = "76.022.389-1",
-              this.token= "4648A"
+
   }
 
   ngOnInit() {
@@ -43,11 +45,7 @@ export class LoginPage implements OnInit {
   };
 
 
-
-
-
-
-   esconderBoton(){
+  esconderBoton(){
      this.renderer.setElementStyle(this.cajaRut.nativeElement, 'display', 'none');
      this.renderer.setElementStyle(this.datosUsuario.nativeElement, 'left', '0');
    };
@@ -58,23 +56,23 @@ export class LoginPage implements OnInit {
 
 
    validarRut(rut){
-    const rutModificado = this.formato_rut(rut);
+    this.rutPromesa(rut).then(dato => {this.rutOk = dato;
+                                        this.conector.traedatosGet(`ventasdiarias/empresa/${this.rutOk}`)
+                                        .subscribe(datos => {       this.datoEmpresa = datos['Data']
+                                                                    console.log(this.datoEmpresa);
+                                                                    this.toastRutCorrecto();
+                                                                    this.memoria.empresa = this.datoEmpresa;
+                                                                    this.traerLocales(this.memoria.empresa['Tabla']);
+                                                                    this.izquierda();
+                                                                    this.esconderBoton();
 
-
-    this.conector.traedatosGet(`ventasdiarias/empresa/${rutModificado}`)
-    .subscribe(datos => {       this.datoEmpresa = datos['Data']
-                                console.log(this.datoEmpresa);
-                                this.memoria.empresa = this.datoEmpresa;
-                                this.traerLocales(this.memoria.empresa['Tabla'])
-                                this.izquierda();
-                                this.esconderBoton();
-
-                              },
-                              error => {
-                                          this.errorRut()
-                                          }
+                                                                  },
+                                                                  error => {
+                                                                            this.errorRut()
+                                                                           }
+                                                                  );
+                                      }
                               );
-
   };
 
   validarToken(token){
@@ -99,46 +97,18 @@ traerLocales(tabla){
 }
 
 
-
-
-
-async errorRut() {
-   const alert = await this.alertController.create({
-     header: 'Error en el rut',
-     subHeader: 'Intentalo de nuevo',
-     message: 'El rut no existe o fue mal digitado. Recuerda no poner puntos (.) ni el guión (-) ',
-     buttons: ['OK']
-   });
-
-   await alert.present();
- }
-
- async errorToken() {
-    const alert = await this.alertController.create({
-      header: 'Error en el Token',
-      subHeader: 'Intentalo de nuevo',
-      message: 'El token no coincide, intentalo de nuevo o ponte en contacto con Gour-net para que podamos ayudarte',
-      buttons: ['OK']
-    });
-
-    await alert.present();
-  }
-
-
 refrescar(){
     location.reload();
 }
 
 
-formato_rut(rut)
-{
-
+formato_rut(rut) {
   var sRut1 = rut;      //contador de para saber cuando insertar el . o la -
   console.log(sRut1.length);
   var nPos = 0; //Guarda el rut invertido con los puntos y el guión agregado
   var sInvertido = ""; //Guarda el resultado final del rut como debe ser
   var sRut = "";
-
+  //
   for(var i = sRut1.length - 1; i >= 0; i-- )
   {
       sInvertido += sRut1.charAt(i);
@@ -151,7 +121,7 @@ formato_rut(rut)
       }
       nPos++;
   }
-
+  //
   for(var j = sInvertido.length - 1; j >= 0; j-- )
   {
       if (sInvertido.charAt(sInvertido.length - 1) != ".")
@@ -164,12 +134,64 @@ formato_rut(rut)
   if (rut.length < 12) {
     rut = "0"+ rut;
   }
-
-  return rut;
+  //
+  return(rut);
 }
 
 
+rutPromesa(rut:string):Promise<any>{
+  return new Promise((resolve, reject) => {
+    const rutOk = this.formato_rut(rut);
+    if (rutOk != undefined){
+      resolve(rutOk);
+    }else{
+      reject("404");
+    }
+  });
+}
 
+async toastRutCorrecto() {
+    const toast = await this.toastController.create({
+      message: 'El rut es correcto',
+      duration: 2000,
+      position: "top"
+    });
+    toast.present();
+  }
+
+
+  async errorRut() {
+     const alert = await this.alertController.create({
+       header: 'Error en el rut',
+       subHeader: 'Intentalo de nuevo',
+       message: 'El rut no existe o fue mal digitado. Recuerda no poner puntos (.) ni el guión (-) ',
+       buttons: ['OK']
+     });
+
+     await alert.present();
+   }
+
+   async errorToken() {
+      const alert = await this.alertController.create({
+        header: 'Error en el Token',
+        subHeader: 'Intentalo de nuevo',
+        message: 'El token no coincide, intentalo de nuevo o ponte en contacto con Gour-net para que podamos ayudarte',
+        buttons: ['OK']
+      });
+
+      await alert.present();
+    }
+
+    async sinToken() {
+       const alert = await this.alertController.create({
+         header: 'Token',
+         subHeader: 'Intentalo de nuevo',
+         message: 'Para proteger tus datos en Gour-net generamos un Token exclusivo para tu empresa. Te invitamos a ponerte en contacto con la oficina y te daremos el tuyo',
+         buttons: ['OK']
+       });
+
+       await alert.present();
+     }
 
 
 
