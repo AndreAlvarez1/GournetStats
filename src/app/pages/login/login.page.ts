@@ -58,8 +58,10 @@ export class LoginPage implements OnInit {
 
 
    validarRut(rut){
-    console.log(rut);
-    this.conector.traedatosGet(`ventasdiarias/empresa/${rut}`)
+    const rutModificado = this.formato_rut(rut);
+
+
+    this.conector.traedatosGet(`ventasdiarias/empresa/${rutModificado}`)
     .subscribe(datos => {       this.datoEmpresa = datos['Data']
                                 console.log(this.datoEmpresa);
                                 this.memoria.empresa = this.datoEmpresa;
@@ -72,6 +74,7 @@ export class LoginPage implements OnInit {
                                           this.errorRut()
                                           }
                               );
+
   };
 
   validarToken(token){
@@ -103,7 +106,7 @@ async errorRut() {
    const alert = await this.alertController.create({
      header: 'Error en el rut',
      subHeader: 'Intentalo de nuevo',
-     message: 'El rut no existe o fue mal digitado. Recuerda poner los puntos (.) y el guión (-) ',
+     message: 'El rut no existe o fue mal digitado. Recuerda no poner puntos (.) ni el guión (-) ',
      buttons: ['OK']
    });
 
@@ -127,7 +130,43 @@ refrescar(){
 }
 
 
+formato_rut(rut)
+{
 
+  var sRut1 = rut;      //contador de para saber cuando insertar el . o la -
+  console.log(sRut1.length);
+  var nPos = 0; //Guarda el rut invertido con los puntos y el guión agregado
+  var sInvertido = ""; //Guarda el resultado final del rut como debe ser
+  var sRut = "";
+
+  for(var i = sRut1.length - 1; i >= 0; i-- )
+  {
+      sInvertido += sRut1.charAt(i);
+      if (i == sRut1.length - 1 )
+          sInvertido += "-";
+      else if (nPos == 3)
+      {
+          sInvertido += ".";
+          nPos = 0;
+      }
+      nPos++;
+  }
+
+  for(var j = sInvertido.length - 1; j >= 0; j-- )
+  {
+      if (sInvertido.charAt(sInvertido.length - 1) != ".")
+          sRut += sInvertido.charAt(j);
+      else if (j != sInvertido.length - 1 )
+          sRut += sInvertido.charAt(j);
+  }
+  //Pasamos al campo el valor formateado
+  rut = sRut.toUpperCase();
+  if (rut.length < 12) {
+    rut = "0"+ rut;
+  }
+
+  return rut;
+}
 
 
 

@@ -41,4 +41,11 @@
         <ion-label>Theme Your App</ion-label>
       </ion-item>
     </ion-list>
+
+
+    <ion-item >
+      <ion-input type="text" [(ngModel)]="rut" placeholder="Rut Empresa" ></ion-input>
+    </ion-item>
+      <ion-button color="light" expand="block" fill="outline" (click)="formato_rut(rut)">Validar </ion-button>
+
 </ion-content>
