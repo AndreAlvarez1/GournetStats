@@ -40,8 +40,13 @@ export class LoginPage implements OnInit {
   }
 
   ngOnInit() {
-    this.conector.traedatosGet("ventasdiarias/empresas/")
-    .subscribe(data => console.log(data));
+
+    this.rut = this.memoria.leerDato("miRut")
+    .then(dato => this.rut = dato);
+
+    this.memoria.leerDato("miToken")
+    .then(dato => this.token = dato);
+
   };
 
 
@@ -80,7 +85,6 @@ export class LoginPage implements OnInit {
     const rut = this.memoria.empresa.Rut;
     if (token == this.memoria.empresa.Token){
         console.log("match!");
-        this.memoria.guardarDato("miRut",rut);
         this.memoria.guardarDato("miToken",token);
         this.router.navigate(['/ventasdiarias']);
       }else{
@@ -141,6 +145,7 @@ formato_rut(rut) {
 
 rutPromesa(rut:string):Promise<any>{
   return new Promise((resolve, reject) => {
+    this.memoria.guardarDato("miRut",rut);
     const rutOk = this.formato_rut(rut);
     if (rutOk != undefined){
       resolve(rutOk);
@@ -150,6 +155,14 @@ rutPromesa(rut:string):Promise<any>{
   });
 }
 
+
+
+
+
+//ALERTAS & TOASTS
+
+
+//TOAST
 async toastRutCorrecto() {
     const toast = await this.toastController.create({
       message: 'El rut es correcto',
