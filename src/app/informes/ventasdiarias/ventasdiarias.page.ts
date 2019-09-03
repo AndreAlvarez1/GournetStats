@@ -17,29 +17,40 @@ export class VentasdiariasPage implements OnInit {
   @ViewChild('barCanvas') barCanvas;
   @ViewChild('lineCanvas') lineCanvas;
 
-fechaChile: any = new Date();
-fechaSelect: any;
-barChart: any;
-lineChart: any;
-local: any;
-tabla: any;
-ventaEmpresa: any;
+  today: any = new Date();
+  yesterday = new Date(new Date().setDate(new Date().getDate()-1));
+
+
+  fechaSelect: any;
+  ayer:any;
+  dia:any;
+
+  barChart: any;
+  lineChart: any;
+  local: any;
+  tabla: any;
+  ventaEmpresa: any;
 
 
   constructor(private conector: ConectorService,
               public alertController: AlertController,
               public memoria: MemoriaService) {
+              
+             
 
   }
 
 
 
   ngOnInit() {
-        console.log("La Fecha de Chile es: ", this.fechaChile);
         this.tabla = this.memoria.empresa.Tabla;
         this.local = this.memoria.locales[0].Id;
-        this.formatoFecha(this.fechaChile)
+        this.fechaSelect = this.formatoFecha(this.today)
+        this.ayer = this.formatoFecha(this.yesterday)
+
         this.cargaDatos();
+        console.log("hoy",this.fechaSelect)  
+        console.log("ayer",this.ayer)  
   }
 
 
@@ -87,18 +98,19 @@ ventaEmpresa: any;
 
 
 formatoFecha(fecha){
+      let nuevaFecha = "";
       const anno = fecha.toString().substring(11,15);
       const dia = fecha.toString().substring(8,10);
       const mesPalabra = fecha.toString().substring(4,7);
       const mes = this.mesAnumero(mesPalabra);
-      this.fechaSelect = dia+"-"+mes+"-"+anno;
-      console.log(this.fechaSelect);
+      nuevaFecha = dia+"-"+mes+"-"+anno;
+      return nuevaFecha;
 }
 
 recargarDatos(local){
   //comentado porque solo se muestran informes del dia actual//
   //this.formatoFecha(this.fecha);
-      this.formatoFecha(this.fechaChile)
+      this.formatoFecha(this.today)
       this.local = local;
       if (this.barChart && this.lineChart){
         this.removeData(this.barChart);
@@ -109,43 +121,69 @@ recargarDatos(local){
 
 cargaDatos(){
       this.conector.traedatosGet(`ventasdiarias/empresa/tabla/${this.tabla}/local/${this.local}/fecha/${this.fechaSelect}`)
-          .subscribe(datos => {          this.ventaEmpresa = datos['Data'];
-                                          if (this.ventaEmpresa.length > 0){
-                                          const ventas = this.ventaEmpresa[0]
-                                          this.dibujarVentas(ventas.Vtadiaact);
-                                          this.dibujarBarras(ventas.Vtadiaant,ventas.Vtadiaact);
-                                          this.dibujarLineas([
-                                                             ventas.H_00,
-                                                             ventas.H_01,
-                                                             ventas.H_02,
-                                                             ventas.H_03,
-                                                             ventas.H_04,
-                                                             ventas.H_05,
-                                                             ventas.H_06,
-                                                             ventas.H_07,
-                                                             ventas.H_08,
-                                                             ventas.H_09,
-                                                             ventas.H_10,
-                                                             ventas.H_11,
-                                                             ventas.H_12,
-                                                             ventas.H_13,
-                                                             ventas.H_14,
-                                                             ventas.H_15,
-                                                             ventas.H_16,
-                                                             ventas.H_17,
-                                                             ventas.H_18,
-                                                             ventas.H_19,
-                                                             ventas.H_20,
-                                                             ventas.H_21,
-                                                             ventas.H_22,
-                                                             ventas.H_23
-                                                           ]);
-
-                                  }else{
-                                    this.alertaDatos();
-                                  }
-                            });
+          .subscribe(datos => {  
+                    this.ventaEmpresa = datos['Data'];
+                     if (this.ventaEmpresa.length > 0){
+                     this.consultas();
+                     this.dia = this.fechaSelect;
+                    }else{
+                        this.cargaAyer()
+                    }
+         });
 }
+
+
+cargaAyer(){
+  this.conector.traedatosGet(`ventasdiarias/empresa/tabla/${this.tabla}/local/${this.local}/fecha/${this.ayer}`)
+                .subscribe(datos => {  
+                  this.ventaEmpresa = datos['Data'];
+                  if (this.ventaEmpresa.length > 0){
+                  this.consultas();
+                  this.dia = this.ayer;
+                  }else{
+                      this.alertaDatos();
+                  }
+              });
+}
+
+
+consultas(){
+  const ventas = this.ventaEmpresa[0]
+  this.dibujarVentas(ventas.Vtadiaact);
+  this.dibujarBarras(ventas.Vtadiaant,ventas.Vtadiaact);
+  this.dibujarLineas([
+                     ventas.H_00,
+                     ventas.H_01,
+                     ventas.H_02,
+                     ventas.H_03,
+                     ventas.H_04,
+                     ventas.H_05,
+                     ventas.H_06,
+                     ventas.H_07,
+                     ventas.H_08,
+                     ventas.H_09,
+                     ventas.H_10,
+                     ventas.H_11,
+                     ventas.H_12,
+                     ventas.H_13,
+                     ventas.H_14,
+                     ventas.H_15,
+                     ventas.H_16,
+                     ventas.H_17,
+                     ventas.H_18,
+                     ventas.H_19,
+                     ventas.H_20,
+                     ventas.H_21,
+                     ventas.H_22,
+                     ventas.H_23
+                   ]);
+}
+
+
+
+
+
+// DIBUJO DE GRAFICOS
 
 dibujarVentas(ventas){
       document.getElementById("ventas").innerHTML = "$"+ventas.toLocaleString()
@@ -207,12 +245,18 @@ dibujarLineas(ventas){
       });
 }
 
+
+
+
+
 removeData(chart) {
      chart.data.labels.pop();
      chart.data.datasets.pop();
      chart.update();
 }
 
+
+//ALERTAS
 
 async alertaDatos() {
    const alert = await this.alertController.create({

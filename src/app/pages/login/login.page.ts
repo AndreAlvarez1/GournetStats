@@ -73,7 +73,8 @@ export class LoginPage implements OnInit {
 
                                                                   },
                                                                   error => {
-                                                                            this.errorRut()
+                                                                            
+                                                                            this.errorRut(error.error)
                                                                            }
                                                                   );
                                       }
@@ -173,11 +174,11 @@ async toastRutCorrecto() {
   }
 
 
-  async errorRut() {
+  async errorRut(error) {
      const alert = await this.alertController.create({
        header: 'Error en el rut',
        subHeader: 'Intentalo de nuevo',
-       message: 'El rut no existe o fue mal digitado. Recuerda no poner puntos (.) ni el guión (-) ',
+       message: 'El rut no existe o fue mal digitado. Recuerda no poner puntos (.) ni el guión (-) (error: ' + error.Message + ')',
        buttons: ['OK']
      });
 
