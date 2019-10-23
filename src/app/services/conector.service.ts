@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ConectorService {
-  url: string= "http://apipdv.clubgournet.cl/api/v1/";
+  url: string= "https://apipdv.clubgournet.cl/api/v1/";
   port: string= "3080";
 
   constructor(private http: HttpClient) {

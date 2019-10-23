@@ -36,8 +36,7 @@ export class LoginPage implements OnInit {
               private router: Router,
               public toastController: ToastController
               ) {
-
-  }
+}
 
   ngOnInit() {
 
@@ -95,9 +94,19 @@ export class LoginPage implements OnInit {
 
 
 traerLocales(tabla){
+      let shops: any[] = [];
+
       this.conector.traedatosGet(`ventasdiarias/empresa/tabla/${tabla}/locales`)
       .subscribe(locales => {console.log(locales['Data']);
-                           this.memoria.locales = locales['Data'];
+                             shops = locales['Data'];
+                             console.log('Cantidad de locales',  shops.length );
+
+                            //  if (shops.length > 1){
+                            //      shops.push({"Id": "C01","Descripcion": "Cadena"});
+                            //       console.log('locales', shops);
+                            //   }
+                            
+                              this.memoria.locales = shops;
                          });
 }
 

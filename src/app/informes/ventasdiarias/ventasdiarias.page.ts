@@ -45,10 +45,11 @@ export class VentasdiariasPage implements OnInit {
   ngOnInit() {
         this.tabla = this.memoria.empresa.Tabla;
         this.local = this.memoria.locales[0].Id;
+
         this.fechaSelect = this.formatoFecha(this.today)
         this.ayer = this.formatoFecha(this.yesterday)
 
-        this.cargaDatos();
+        this.cargaDatos(this.local);
         console.log("hoy",this.fechaSelect)  
         console.log("ayer",this.ayer)  
   }
@@ -112,17 +113,25 @@ recargarDatos(local){
   //this.formatoFecha(this.fecha);
       this.formatoFecha(this.today)
       this.local = local;
-      if (this.barChart && this.lineChart){
+      if (this.barChart && this.lineChart) {
         this.removeData(this.barChart);
         this.removeData(this.lineChart);
+      }else {
+        this.cargaDatos(this.local);
       }
-      this.cargaDatos();
+
+
+
+
+     
+      
 }
 
-cargaDatos(){
-      this.conector.traedatosGet(`ventasdiarias/empresa/tabla/${this.tabla}/local/${this.local}/fecha/${this.fechaSelect}`)
+cargaDatos(local){
+      this.conector.traedatosGet(`ventasdiarias/empresa/tabla/${this.tabla}/local/`+ local +`/fecha/${this.fechaSelect}`)
           .subscribe(datos => {  
                     this.ventaEmpresa = datos['Data'];
+                    console.log('ventaEmpresa', this.ventaEmpresa);
                      if (this.ventaEmpresa.length > 0){
                      this.consultas();
                      this.dia = this.fechaSelect;
@@ -131,6 +140,7 @@ cargaDatos(){
                     }
          });
 }
+
 
 
 cargaAyer(){
@@ -148,7 +158,7 @@ cargaAyer(){
 
 
 consultas(){
-  const ventas = this.ventaEmpresa[0]
+  const ventas = this.ventaEmpresa[0];
   this.dibujarVentas(ventas.Vtadiaact);
   this.dibujarBarras(ventas.Vtadiaant,ventas.Vtadiaact);
   this.dibujarLineas([
@@ -178,6 +188,11 @@ consultas(){
                      ventas.H_23
                    ]);
 }
+
+
+
+
+
 
 
 
@@ -249,6 +264,10 @@ dibujarLineas(ventas){
 
 
 
+
+
+
+
 removeData(chart) {
      chart.data.labels.pop();
      chart.data.datasets.pop();
@@ -270,7 +289,7 @@ async alertaDatos() {
  }
 
  doRefresh(event) {
-     this.cargaDatos();
+     this.cargaDatos(this.local);
      setTimeout(() => {
        event.target.complete();
      }, 500);
